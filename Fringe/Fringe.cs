@@ -140,6 +140,8 @@ namespace FRGenerics.Fringe {
     }
 
     protected void InsideInterior(int interior) {
+      PlayerGenerics.DisableInteriorControlsThisFrame();
+
       Player me = LocalPlayer;
 
       foreach (Player player in Players) {

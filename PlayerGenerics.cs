@@ -52,6 +52,41 @@ namespace FRGenerics {
   }
 
   public class PlayerGenerics {
+    public static readonly Control[] controlsToDisable = {
+      Control.Aim,
+      Control.Attack,
+      Control.SelectWeapon,
+      Control.Jump,
+      Control.Cover,
+      (Control) 53, // WeaponSpecial
+      (Control) 54, // WeaponSpecial2
+      Control.VehicleAim,
+      Control.VehicleAttack,
+      Control.VehicleAttack2,
+      Control.VehicleHeadlight,
+      Control.VehicleSelectNextWeapon,
+      Control.VehicleSelectPrevWeapon,
+      Control.VehicleJump,
+      Control.VehicleFlyAttack,
+      Control.VehicleFlyAttack2,
+      Control.MeleeAttackLight,
+      Control.MeleeAttackHeavy,
+      Control.MeleeBlock,
+      Control.SelectWeaponUnarmed,
+      Control.SelectWeaponMelee,
+      Control.SelectWeaponHandgun,
+      Control.SelectWeaponShotgun,
+      Control.SelectWeaponSmg,
+      Control.SelectWeaponAutoRifle,
+      Control.SelectWeaponSniper,
+      Control.SelectWeaponHeavy,
+      Control.SelectWeaponSpecial,
+      Control.VehicleGunLeft,
+      Control.VehicleGunRight,
+      Control.VehicleGunUp,
+      Control.VehicleGunDown
+    };
+
     public const int DefaultFlags = 0;
 
     public static bool HasFlag(Player player, PlayerFlag flag) {
@@ -88,6 +123,12 @@ namespace FRGenerics {
     public static void Show(Player player) {
       Function.Call(Hash.SET_PLAYER_INVISIBLE_LOCALLY, player, true);
       Function.Call(Hash.SET_ENTITY_NO_COLLISION_ENTITY, Game.PlayerPed, player.Character, true);
+    }
+
+    public static void DisableInteriorControlsThisFrame() {
+      for (short i = 0; i < controlsToDisable.Length; i++) {
+        Game.DisableControlThisFrame(0, controlsToDisable[i]);
+      }
     }
   }
 
