@@ -13,18 +13,7 @@ using FRGenerics.Drawing;
 using FRGenerics.Fringe;
 
 namespace FRGenerics
-{
-  public enum PlayerFlag {
-    IsInApartments,
-    IsApartmentsOwner,
-    IsInGarage
-  }
-
-  public sealed class PlayerProperties {
-    public static string InteriorId = "_FRGInteriorId";
-    public static string InteriorOwner = "_FRGInteriorOwner";
-  }
-  
+{  
   public class TestConfig {
     public string TestValue { get; set; }
   }

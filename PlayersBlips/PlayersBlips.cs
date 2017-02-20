@@ -1,31 +1,9 @@
 ﻿using System;
-//using System.Timers;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using System.Drawing;
 
-namespace FRGenerics.PlayersBlips {
-  public enum HeadDisplayFlag {
-    TextWithOutline,
-    NoneEmpty,
-    HealthBar,
-    AudioSpeaker,
-    FlagOrPaused,
-    NoneEmpty2,
-    PassiveMode,
-    WantedStar,
-    SteeringWheel,
-    Headset,
-    HighlightPlayer,
-    TextNoOutline,
-    ArrowDown,
-    BreifCase,
-    LittleUser,
-    RankNumber
-  }
-  
+namespace FRGenerics.PlayersBlips {  
   public class PlayersBlips : BaseScript {
     public PlayersBlips() {
       EventHandlers["onClientMapStart"] += new Action<dynamic>((dynamic res) => {
@@ -47,8 +25,7 @@ namespace FRGenerics.PlayersBlips {
           //continue;
         }
 
-        // Initializing head display and player blip
-        int headDisplay = Function.Call<int>(Hash._CREATE_HEAD_DISPLAY, ped, player.Name, false, true, "", false);
+        // Initializing player blip
         Blip pedBlip = ped.AttachedBlip;
         if (pedBlip == null || pedBlip.Exists() == false) {
           pedBlip = ped.AttachBlip();
@@ -57,8 +34,7 @@ namespace FRGenerics.PlayersBlips {
           pedBlip.Scale = .8f;
           pedBlip.IsFriendly = true;
         }
-
-        UpdateWantedLevel(player, ped, headDisplay);
+        
         UpdateBlip(player, ped, pedBlip);
       }
     }
@@ -94,17 +70,6 @@ namespace FRGenerics.PlayersBlips {
       }
 
       Function.Call(Hash._SET_BLIP_SHOW_HEADING_INDICATOR, blip, showHeading);
-    }
-
-    protected void UpdateWantedLevel(Player player, Ped ped, int display) {
-      int level = player.WantedLevel;
-
-      if (level > 0) {
-        Function.Call(Hash._SET_HEAD_DISPLAY_FLAG, display, HeadDisplayFlag.WantedStar, true);
-        Function.Call(Hash._SET_HEAD_DISPLAY_WANTED, display, level);
-      } else {
-        Function.Call(Hash._SET_HEAD_DISPLAY_FLAG, display, HeadDisplayFlag.WantedStar, false);
-      }
     }
   }
 }

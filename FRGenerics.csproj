@@ -58,7 +58,6 @@
     <Compile Include="Fringe\Fringe.cs" />
     <Compile Include="Interior.cs" />
     <Compile Include="Fringe\OwnerSelectionMenu.cs" />
-    <Compile Include="Fringe\PlayerInterior.cs" />
     <Compile Include="HeadDisplayManager.cs" />
     <Compile Include="iFruit\CustomiFruit.cs" />
     <None Include="iFruit\ExampleScript.cs" />
