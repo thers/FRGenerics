@@ -60,6 +60,7 @@
     <Compile Include="Fringe\OwnerSelectionMenu.cs" />
     <Compile Include="HeadDisplayManager.cs" />
     <Compile Include="iFruit\CustomiFruit.cs" />
+    <Compile Include="VehicleGenerics.cs" />
     <None Include="iFruit\ExampleScript.cs" />
     <Compile Include="iFruit\iFruitContact.cs" />
     <Compile Include="iFruit\iFruitContactCollection.cs" />

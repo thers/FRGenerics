@@ -18,6 +18,25 @@ namespace FRGenerics
     public string TestValue { get; set; }
   }
 
+  //public static class Scripts {
+  //  public static void TeleportToWaypoint() {
+  //    Blip wpBlip = new Blip(Function.Call<int>(Hash.GET_FIRST_BLIP_INFO_ID, 8));
+
+  //    if (Function.Call<bool>(Hash.IS_WAYPOINT_ACTIVE)) {
+  //      Vector3 wpVec = Function.Call<Vector3>(Hash.GET_BLIP_COORDS, wpBlip);
+  //      Game.PlayerPed.Position = wpVec;
+  //    } else {
+  //      Screen.ShowSubtitle("Waypoint not active.");
+  //    }
+  //  }
+
+  //  public static void SpawnVehicle(string vehiclename) {
+  //    Model model = new Model(vehiclename);
+  //    model.Request(1000);
+  //    World.CreateVehicle(model, Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5);
+  //  }
+  //}
+
   public class FRGenerics : BaseScript
   {
     //CustomiFruit ifruit;
@@ -25,6 +44,7 @@ namespace FRGenerics
     public FRGenerics() {
       EntityDecoration.RegisterProperty(PlayerProperties.InteriorId, DecorationType.Int);
       EntityDecoration.RegisterProperty(PlayerProperties.InteriorOwner, DecorationType.Int);
+      EntityDecoration.RegisterProperty(PlayerProperties.Flags, DecorationType.Int);
 
       EventHandlers["onClientMapStart"] += new Action<dynamic>((res) => {
         Function.Call(Hash._LOAD_MP_DLC_MAPS);
@@ -53,7 +73,7 @@ namespace FRGenerics
       //  RightButtonIcon = SoftKeyIcon.Website
       //};
 
-      //ifruit.SetWallpaper(new Wallpaper("char_facebook"));
+      //ifruit.SetWallpaper(Wallpaper.BadgerDefault);
 
       //var contact = new iFruitContact("Spawn Adder", 19);
       //contact.Answered += Contact_Answered;
@@ -77,10 +97,10 @@ namespace FRGenerics
       //var pos = Game.PlayerPed.GetOffsetPosition(new Vector3(1f, 0, 0));
 
       //Function.Call(Hash.SET_MOBILE_PHONE_POSITION, pos.X, pos.Y, pos.Z);
-      
+
       Tick += OnTick21;
 
-      Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, "custom_images");
+      //Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, "custom_images");
     }
 
     public async Task OnTick3() {
@@ -103,25 +123,6 @@ namespace FRGenerics
     //private void Contact_Answered(iFruitContact contact) {
     //  Scripts.SpawnVehicle("ADDER");
     //  Screen.ShowNotification("Your Adder has been delivered!");
-    //}
-
-    //public static class Scripts {
-    //  public static void TeleportToWaypoint() {
-    //    Blip wpBlip = new Blip(Function.Call<int>(Hash.GET_FIRST_BLIP_INFO_ID, 8));
-
-    //    if (Function.Call<bool>(Hash.IS_WAYPOINT_ACTIVE)) {
-    //      Vector3 wpVec = Function.Call<Vector3>(Hash.GET_BLIP_COORDS, wpBlip);
-    //      Game.PlayerPed.Position = wpVec;
-    //    } else {
-    //      Screen.ShowSubtitle("Waypoint not active.");
-    //    }
-    //  }
-
-    //  public static void SpawnVehicle(string vehiclename) {
-    //    Model model = new Model(vehiclename);
-    //    model.Request(1000);
-    //    World.CreateVehicle(model, Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 5);
-    //  }
     //}
 
 

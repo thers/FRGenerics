@@ -63,6 +63,8 @@ namespace FRGenerics {
       Control.VehicleAim,
       Control.VehicleAttack,
       Control.VehicleAttack2,
+      Control.VehicleAccelerate,
+      Control.VehicleBrake,
       Control.VehicleHeadlight,
       Control.VehicleSelectNextWeapon,
       Control.VehicleSelectPrevWeapon,
