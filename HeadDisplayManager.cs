@@ -11,7 +11,7 @@ namespace FRGenerics {
     HealthBar,
     AudioSpeaker,
     FlagOrPaused,
-    NoneEmpty2,
+    Flag,
     PassiveMode,
     WantedStar,
     SteeringWheel,
@@ -21,7 +21,8 @@ namespace FRGenerics {
     ArrowDown,
     BreifCase,
     LittleUser,
-    RankNumber
+    RankNumber,
+    VoiceIndicator
   }
 
   public class HeadDisplayManager: BaseScript {
@@ -33,7 +34,7 @@ namespace FRGenerics {
       foreach (Player player in Players) {
         // No need to make head display for youself, huh
         if (player == LocalPlayer) {
-          continue;
+          //continue;
         }
         
         if (PlayerGenerics.HasFlag(player, PlayerFlag.HeadDisplayHidden)) {
@@ -72,9 +73,57 @@ namespace FRGenerics {
       }
     }
 
+    protected int clr = 200;
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected int GetHeadDisplay(Player player) {
-      return Function.Call<int>(Hash._CREATE_HEAD_DISPLAY, player.Character, player.Name, false, false, "", false);
+      int id = Function.Call<int>(
+        Hash._CREATE_HEAD_DISPLAY,
+        player.Character,
+        player.Name,
+        false,
+        false,
+        "ONEE",
+        false
+      );
+
+      //Function.Call((Hash) 0x31698AA80E0223F8, id);
+
+      //Function.Call(
+      //  (Hash) 0x6DD05E9D83EFA4C9,
+      //  id,
+      //  player.Name,
+      //  false,
+      //  false,
+      //  "ONEE",
+      //  0,
+      //  255,
+      //  255,
+      //  255
+      //);
+
+      Function.Call(Hash._SET_HEAD_DISPLAY_FLAG, id, HeadDisplayFlag.SteeringWheel, true);
+      Function.Call((Hash) 0x613ED644950626AE, id, HeadDisplayFlag.SteeringWheel, 24);
+      Function.Call((Hash) 0x613ED644950626AE, id, 0, 24);
+
+
+      //Function.Call((Hash) 0x7B7723747CCB55B6, id, "huh/123");
+
+      //for (int i = 0; i <= 16; i++) {
+      //  if (i != 1 && i != 0) {
+      //    if (i == 2) {
+      //      Function.Call((Hash) 0x3158C77A7E888AB4, id, 28);
+      //    } else {
+      //      Function.Call(Hash._SET_HEAD_DISPLAY_FLAG, id, i, true);
+      //    }
+
+      //    if (i != 2 && i != 0) {
+      //      Function.Call((Hash) 0xD48FE545CD46F857, id, i, 150);
+      //    }
+      //  }
+      //}
+
+      return id;
     }
   }
 }
