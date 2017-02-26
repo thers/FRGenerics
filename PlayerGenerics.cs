@@ -52,6 +52,8 @@ namespace FRGenerics {
   }
 
   public class PlayerGenerics {
+    public static WeaponHash Unarmed = (WeaponHash) Function.Call<int>(Hash.GET_HASH_KEY, "weapon_unarmed");
+
     public static readonly Control[] controlsToDisable = {
       Control.Aim,
       Control.Attack,
@@ -135,6 +137,14 @@ namespace FRGenerics {
   }
 
   public class PlayerInterior {
+    public async static Task Load(int interiorId) {
+      Function.Call((Hash) ThersHash._LOAD_INTERIOR, interiorId);
+
+      while (!Function.Call<bool>(Hash.IS_INTERIOR_READY, interiorId)) {
+        await BaseScript.Delay(1);
+      }
+    }
+
     public static bool IsIn(Player player, int interiorId) {
       if (EntityDecoration.ExistOn(player.Character, PlayerProperties.InteriorId)) {
         return EntityDecoration.Get<int>(player.Character, PlayerProperties.InteriorId) == interiorId;

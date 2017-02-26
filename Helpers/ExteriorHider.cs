@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 
-namespace FRGenerics.Fringe {
+namespace FRGenerics.Helpers {
   public class ExteriorHider: BaseScript {
     public ExteriorHider() {
       //Tick += OnTick;

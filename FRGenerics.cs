@@ -1,16 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using System.Drawing;
-using iFruitAddon;
-using FRGenerics.Drawing;
-using FRGenerics.Fringe;
 
 namespace FRGenerics
 {
@@ -18,7 +9,8 @@ namespace FRGenerics
     _DESTROY_HEAD_DISPLAY = 0x31698AA80E0223F8L,
     _SET_HEAD_DISPLAY_HEALTH_BAR_VALUE = 0x3158C77A7E888AB4L,
     _SET_HEAD_DISPLAY_FLAG_ALPHA = 0xD48FE545CD46F857L,
-    _SET_HEAD_DISPLAY_AUDIO_SPEAKER_STRING = 0x7B7723747CCB55B6L
+    _SET_HEAD_DISPLAY_AUDIO_SPEAKER_STRING = 0x7B7723747CCB55B6L,
+    _LOAD_INTERIOR = 0x2CA429C029CCF247L
   }
 
   public class TestConfig {
