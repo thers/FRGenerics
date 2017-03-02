@@ -50,14 +50,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Apartments.cs" />
     <Compile Include="BitMap.cs" />
     <Compile Include="Drawing\KnownColors.cs" />
     <Compile Include="EntityDecoration.cs" />
     <Compile Include="FRGenerics.cs" />
-    <Compile Include="Fringe\ExteriorHider.cs" />
-    <Compile Include="Fringe\Fringe.cs" />
+    <Compile Include="Fringe.cs" />
+    <Compile Include="Helpers\ExteriorHider.cs" />
     <Compile Include="Interior.cs" />
-    <Compile Include="Fringe\OwnerSelectionMenu.cs" />
     <Compile Include="HeadDisplayManager.cs" />
     <Compile Include="iFruit\CustomiFruit.cs" />
     <Compile Include="VehicleGenerics.cs" />

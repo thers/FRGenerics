@@ -7,7 +7,7 @@ using CitizenFX.Core.UI;
 using CitizenFX.Core.Native;
 using System.Drawing;
 using FRGenerics.Drawing;
-using NativeUI;
+//using NativeUI;
 
 namespace FRGenerics {
   public class Apartment {
@@ -119,13 +119,16 @@ namespace FRGenerics {
         return;
       }
 
-      var playersInside = GetOwnersInsideInterior(CurrentApartment.InteriorId);
+      BeginTransitionInside();
 
-      if (playersInside.Count == 0) {
-        BeginTransitionInside();
-      } else {
-        ShowOwnerSelectionMenu(playersInside);
-      }
+      // Uncomment when lazy tard will make a menu...
+      //var playersInside = GetOwnersInsideInterior(CurrentApartment.InteriorId);
+
+      //if (playersInside.Count == 0) {
+      //  BeginTransitionInside();
+      //} else {
+      //  ShowOwnerSelectionMenu(playersInside);
+      //}
     }
 
     protected void BeginTransitionInside(Player owner = null) {
@@ -148,10 +151,22 @@ namespace FRGenerics {
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected async Task TransitionOutside() {
-      if (!Screen.Fading.IsFadedOut) {
+      Screen.Fading.FadeOut(200);
+      while (!Screen.Fading.IsFadedOut) {
         await Delay(1);
-        return;
       }
+
+      await TeleportPlayerTo(CurrentApartment.ExitOutside, 1f);
+
+      Game.Player.CanControlCharacter = true;
+      Game.PlayerPed.IsInvincible = false;
+
+      Screen.Fading.FadeIn(200);
+      while (!Screen.Fading.IsFadedIn) {
+        await Delay(1);
+      }
+
+      State = PlayerApartmentState.Outside;
     }
     #endregion
 
@@ -171,7 +186,9 @@ namespace FRGenerics {
     }
 
     protected void BeginTransitionOutside() {
-      // TODO
+      State = PlayerApartmentState.TransitionOutside;
+
+      Game.Player.CanControlCharacter = false;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -277,34 +294,34 @@ namespace FRGenerics {
     #endregion
 
     #region EnterOutsideMenu
-    protected MenuPool eomMenuPool = new MenuPool();
-    protected UIMenu eomMenu = new UIMenu("", "");
+    //protected MenuPool eomMenuPool = new MenuPool();
+    //protected UIMenu eomMenu = new UIMenu("", "");
 
-    protected bool open = false;
+    //protected bool open = false;
 
-    protected void ShowOwnerSelectionMenu(List<Player> players) {
-      var mine = new UIMenuItem("Enter my apartments");
-      mine.Activated += MineActivated;
+    //protected void ShowOwnerSelectionMenu(List<Player> players) {
+    //  var mine = new UIMenuItem("Enter my apartments");
+    //  mine.Activated += MineActivated;
 
-      foreach(Player player in players) {
-        var playerClosure = player;
-        var item = new UIMenuItem(player.Name);
-        item.Activated += (UIMenu sender, UIMenuItem selectedItem) => {
-          BeginTransitionInside(player);
-        };
-      }
+    //  foreach(Player player in players) {
+    //    var playerClosure = player;
+    //    var item = new UIMenuItem(player.Name);
+    //    item.Activated += (UIMenu sender, UIMenuItem selectedItem) => {
+    //      BeginTransitionInside(player);
+    //    };
+    //  }
 
-      eomMenu.AddItem(mine);
+    //  eomMenu.AddItem(mine);
 
-      eomMenuPool.RefreshIndex();
+    //  eomMenuPool.RefreshIndex();
 
-      eomMenu.Visible = true;
-      eomMenuPool.ProcessMenus();
-    }
+    //  eomMenu.Visible = true;
+    //  eomMenuPool.ProcessMenus();
+    //}
 
-    private void MineActivated(UIMenu sender, UIMenuItem selectedItem) {
-      BeginTransitionInside();
-    }
+    //private void MineActivated(UIMenu sender, UIMenuItem selectedItem) {
+    //  BeginTransitionInside();
+    //}
     #endregion
   }
 }

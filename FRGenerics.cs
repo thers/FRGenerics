@@ -61,6 +61,8 @@ namespace FRGenerics
         Function.Call(Hash.REQUEST_IPL, "CS1_02_cf_offmission");
       });
 
+      Function.Call(Hash.REQUEST_SCALEFORM_MOVIE, "Window_texture");
+
       //Tick += OnTick;
 
       //ifruit = new CustomiFruit() {
@@ -140,6 +142,8 @@ namespace FRGenerics
       //}
       //var missionMarker = new Scaleform("breaking_news");
       //var missionMarker = new Scaleform("cellphone_ifruit");
+
+      //var missionMarker = new Scaleform("Window_texture");
 
       //if (missionMarker.IsLoaded == false) {
       //  Debug.WriteLine("SF not loaded");
@@ -241,7 +245,7 @@ namespace FRGenerics
       //  -Game.PlayerPed.Rotation,
       //  new Vector3(2.5f, 1.5f, 1f)
       //);
-      //missionMarker.Render2D();
+      //missionMarker?.Render2D();
       //missionMarker.Render2DScreenSpace(new PointF(500, 200), new PointF(200, 500));
       //}
 
