@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
+using System.Globalization;
 
 namespace FRGenerics
 {
@@ -99,7 +101,7 @@ namespace FRGenerics
 
       //Function.Call(Hash.SET_MOBILE_PHONE_POSITION, pos.X, pos.Y, pos.Z);
 
-      Tick += OnTick21;
+      //Tick += OnTick21;
 
       //Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, "custom_images");
     }
