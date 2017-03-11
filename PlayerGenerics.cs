@@ -138,7 +138,7 @@ namespace FRGenerics {
 
   public class PlayerInterior {
     public async static Task Load(int interiorId) {
-      Function.Call((Hash) ThersHash._LOAD_INTERIOR, interiorId);
+      Function.Call((Hash) MissingHash._LOAD_INTERIOR, interiorId);
 
       while (!Function.Call<bool>(Hash.IS_INTERIOR_READY, interiorId)) {
         await BaseScript.Delay(1);

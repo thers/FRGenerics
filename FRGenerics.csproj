@@ -60,7 +60,7 @@
     <Compile Include="Interior.cs" />
     <Compile Include="HeadDisplayManager.cs" />
     <Compile Include="iFruit\CustomiFruit.cs" />
-    <Compile Include="Test\Tests.cs" />
+    <None Include="Test\Tests.cs" />
     <Compile Include="VehicleGenerics.cs" />
     <None Include="iFruit\ExampleScript.cs" />
     <Compile Include="iFruit\iFruitContact.cs" />
