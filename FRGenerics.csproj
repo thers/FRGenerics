@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Apartments.cs" />
-    <Compile Include="BitMap.cs" />
+    <Compile Include="BitSet.cs" />
     <Compile Include="Drawing\KnownColors.cs" />
     <Compile Include="EntityDecoration.cs" />
     <Compile Include="FRGenerics.cs" />

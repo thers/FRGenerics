@@ -98,7 +98,7 @@ namespace FRGenerics {
     }
 
     public static void SetFlag(Player player, PlayerFlag flag, bool toggle) {
-      BitMap flags = GetFlags(player);
+      BitSet flags = GetFlags(player);
 
       if (toggle) {
         flags.Set((int) flag);
@@ -109,7 +109,7 @@ namespace FRGenerics {
       EntityDecoration.Set(player.Character, PlayerProperties.Flags, flags);
     }
 
-    public static BitMap GetFlags(Player player) {
+    public static BitSet GetFlags(Player player) {
       Ped character = player.Character;
 
       if (EntityDecoration.ExistOn(character, PlayerProperties.Flags)) {

@@ -10,7 +10,7 @@ namespace FRGenerics
         public void InsideInterior(int interior, int hash, Vector3 pos)
         {
             PlayerGenerics.DisableInteriorControlsThisFrame();
-
+            
             Function.Call(Hash.SET_RADAR_AS_INTERIOR_THIS_FRAME, hash, pos.X, pos.Y, pos.Z, 0);
             Function.Call(Hash._SET_PLAYER_BLIP_POSITION_THIS_FRAME, pos.X, pos.Y);
 

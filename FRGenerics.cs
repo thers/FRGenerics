@@ -108,6 +108,9 @@ namespace FRGenerics
             Tick += OnTick21;
 
             //Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, "custom_images");
+
+            frng = new Fringe();
+            frng.Players = Players;
         }
 
         protected volatile Fringe frng;
@@ -141,6 +144,12 @@ namespace FRGenerics
 
         public async Task OnTick21()
         {
+            if (!set)
+            {
+                frng.InsideInterior(-1, Game.GenerateHash("v_garages"), Game.PlayerPed.Position);
+                set = true;
+            }
+
             //if (Game.IsControlPressed(0, Control.CinematicSlowMo)) {
             //if (missionMarker == null) {
             //missionMarker = new Scaleform("mp_mission_name_freemode");
