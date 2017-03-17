@@ -61,6 +61,7 @@
     <Compile Include="HeadDisplayManager.cs" />
     <Compile Include="iFruit\CustomiFruit.cs" />
     <None Include="Test\Tests.cs" />
+    <Compile Include="TinyTween.cs" />
     <Compile Include="VehicleGenerics.cs" />
     <None Include="iFruit\ExampleScript.cs" />
     <Compile Include="iFruit\iFruitContact.cs" />

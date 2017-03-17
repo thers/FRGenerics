@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using System.Globalization;
+using TinyTween;
 
 namespace FRGenerics
 {
@@ -139,16 +139,142 @@ namespace FRGenerics
         //}
 
         protected Scaleform missionMarker;
+        protected Scaleform sff;
 
         protected volatile bool set = false;
 
+        protected bool phoneOpen = false;
+        protected bool phoneOpening = false;
+        protected bool phoneClosing = false;
+        protected Tween<float> phoneYrot = new FloatTween();
+        protected Tween<float> phoneYpos = new FloatTween();
+
+        protected float phoneYAngle = 0f;
+
+        internal async Task LoadTextureDict(string txd)
+        {
+            if (!Function.Call<bool>(Hash.HAS_STREAMED_TEXTURE_DICT_LOADED, txd))
+            {
+                Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, txd, 0);
+                await Delay(0);
+            }
+        }
+
+        internal void SetWallpaperTXD(string textureDict)
+        {
+            Function.Call(Hash._PUSH_SCALEFORM_MOVIE_FUNCTION, sff.Handle, "SET_BACKGROUND_CREW_IMAGE");
+            Function.Call(Hash._BEGIN_TEXT_COMPONENT, "CELL_2000");
+            Function.Call(Hash._ADD_TEXT_COMPONENT_ITEM_STRING, textureDict);
+            Function.Call(Hash._END_TEXT_COMPONENT);
+            Function.Call(Hash._POP_SCALEFORM_MOVIE_FUNCTION_VOID);
+        }
+
         public async Task OnTick21()
         {
+            await LoadTextureDict("Phone_Wallpaper_ifruitdefault");
+
             if (!set)
             {
-                frng.InsideInterior(-1, Game.GenerateHash("v_garages"), Game.PlayerPed.Position);
+                try
+                {
+                    sff = new Scaleform("cellphone_ifruit");
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Something bad happened :(");
+                }
+                
+                Function.Call(Hash.DESTROY_MOBILE_PHONE);
                 set = true;
             }
+
+            //if (!sff.IsLoaded)
+            //{
+            //    Debug.WriteLine("NOT LOADED!!!");
+            //}
+
+            if (!phoneOpen && Game.IsControlJustReleased(1, Control.PhoneUp))
+            {
+                Function.Call(Hash.CREATE_MOBILE_PHONE, 0);
+                Function.Call(Hash.SET_MOBILE_PHONE_SCALE, 250f);
+
+                phoneYpos.Start(-60f, -20f, .3f, ScaleFuncs.Linear);
+                phoneYrot.Start(-90f, 0f, .3f, ScaleFuncs.Linear);
+                phoneOpening = true;
+            }
+            
+            if (phoneOpening)
+            {
+                if (phoneYpos.State == TweenState.Stopped && phoneYrot.State == TweenState.Stopped)
+                {
+                    phoneOpen = true;
+                    phoneOpening = false;
+                }
+                else if (phoneYpos.State == TweenState.Running || phoneYrot.State == TweenState.Running)
+                {
+                    phoneYpos.Update(Game.LastFrameTime);
+                    phoneYrot.Update(Game.LastFrameTime);
+
+                    Function.Call(Hash.SET_MOBILE_PHONE_POSITION, 50.0f, phoneYpos.CurrentValue, -60.0f);
+                    Function.Call(Hash.SET_MOBILE_PHONE_ROTATION, -90f, phoneYrot.CurrentValue, 0f, true);
+                }
+            }
+
+            if (phoneClosing)
+            {
+                if (phoneYpos.State == TweenState.Stopped)
+                {
+                    phoneClosing = false;
+                    phoneOpen = false;
+                    Function.Call(Hash.DESTROY_MOBILE_PHONE);
+                }
+                else if (phoneYpos.State == TweenState.Running)
+                {
+                    phoneYpos.Update(Game.LastFrameTime);
+
+                    Function.Call(Hash.SET_MOBILE_PHONE_POSITION, 50.0f, phoneYpos.CurrentValue, -60.0f);
+                }
+            }
+
+            if (phoneOpen && !phoneClosing && Game.IsControlJustReleased(1, Control.FrontendCancel))
+            {
+                phoneClosing = true;
+
+                phoneYpos.Start(-20f, -60f, .1f, ScaleFuncs.Linear);
+
+                Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "Put_Away", "Phone_SoundSet_Michael", 1);
+            }
+
+            var txt2 = new Text("Nope", new PointF(0f, 0f), .5f);
+            txt2.Draw();
+
+            if (phoneOpen || phoneOpening || phoneClosing)
+            {
+                var renderId = new OutputArgument();
+                Function.Call(Hash.GET_MOBILE_PHONE_RENDER_ID, renderId);
+                Function.Call(Hash.SET_TEXT_RENDER_ID, renderId.GetResult<int>());
+
+                //SetWallpaperTXD("Phone_Wallpaper_ifruitdefault");
+
+                sff.CallFunction("SET_BACKGROUND_CREW_IMAGE", "Phone_Wallpaper_ifruitdefault");
+
+                Function.Call(Hash._PUSH_SCALEFORM_MOVIE_FUNCTION, sff.Handle, "SET_HEADER");
+                Function.Call(Hash._BEGIN_TEXT_COMPONENT, "STRING");
+                Function.Call((Hash) 0x761B77454205A61D, "Weeb!", -1);
+                Function.Call(Hash._END_TEXT_COMPONENT);
+                Function.Call(Hash._POP_SCALEFORM_MOVIE_FUNCTION_VOID);
+
+                sff.Render2DScreenSpace(new PointF(0f, 0f), new PointF(256f, 256f));
+
+
+                Function.Call(Hash.SET_TEXT_RENDER_ID, 1);
+            }
+
+            //if (!set)
+            //{
+            //    frng.InsideInterior(-1, Game.GenerateHash("v_garages"), Game.PlayerPed.Position);
+            //    set = true;
+            //}
 
             //if (Game.IsControlPressed(0, Control.CinematicSlowMo)) {
             //if (missionMarker == null) {
@@ -173,7 +299,7 @@ namespace FRGenerics
             //    Debug.WriteLine("SF NOT LOADED");
             //}
 
-            //var missionMarker = new Scaleform("sf_logo");
+            //var missionMarker = new Scaleform("breaking_news_plz");
 
             //if (missionMarker.IsLoaded == false)
             //{
