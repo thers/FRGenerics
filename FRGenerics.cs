@@ -5,6 +5,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using TinyTween;
+using FRGenerics.Lab.Phone;
 
 namespace FRGenerics
 {
@@ -105,12 +106,69 @@ namespace FRGenerics
 
             //Function.Call(Hash.SET_MOBILE_PHONE_POSITION, pos.X, pos.Y, pos.Z);
 
-            Tick += OnTick21;
 
             //Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, "custom_images");
 
-            frng = new Fringe();
-            frng.Players = Players;
+            //frng = new Fringe();
+            //frng.Players = Players;
+            Tick += OnTick21;
+
+            //IsCreated = false;
+            //Tick += OnTickRT;
+        }
+
+        protected bool IsCreated { get; set; }
+        protected Prop Prp { get; set; }
+
+        protected Text txt = new Text("YAY", new PointF(10, 10), 1f);
+        protected Rectangle rect = new Rectangle(new PointF(0, 0), new SizeF(200f, 200f), Color.FromArgb(255, 0, 0));
+
+        public async Task OnTickRT()
+        {
+            //Debug.WriteLine("TickRT");
+
+            //if (!IsCreated)
+            //{
+            //    Prp = await World.CreateProp(new Model("prop_npc_phone"), Game.PlayerPed.GetOffsetPosition(new Vector3(0, 2f, 0)), false, false);
+            //    Prp.IsPositionFrozen = true;
+            //    Prp.MarkAsNoLongerNeeded();
+            //    IsCreated = true;
+
+                
+            //}
+
+            if (!Function.Call<bool>(Hash.IS_NAMED_RENDERTARGET_REGISTERED, "__rt"))
+            {
+                Function.Call(Hash.REGISTER_NAMED_RENDERTARGET, "__rt", 0);
+                Function.Call(
+                    Hash.LINK_NAMED_RENDERTARGET,
+                    //557686077 // screen
+                608950395 // ex_tvscreen
+                //0xc2161726 // prop_npc_phone
+                );
+            }
+            else if (!IsCreated)
+            {
+                Function.Call(Hash.RELEASE_NAMED_RENDERTARGET, "__rt");
+                IsCreated = true;
+                Debug.WriteLine($"Recreate RT");
+            }
+
+            int renderTarget = Function.Call<int>(Hash.GET_NAMED_RENDERTARGET_RENDER_ID, "__rt");
+
+            //Debug.WriteLine($"Render target ID: {renderTarget}");
+
+            Function.Call(Hash.SET_TEXT_RENDER_ID, new IntPtr(renderTarget));
+            txt.Draw();
+            rect.Draw();
+            Function.Call((Hash)0xE3A3DB414A373DAB);
+            Function.Call(Hash.SET_TEXT_RENDER_ID, 1);
+
+            //if (!Function.Call<bool>(Hash.IS_NAMED_RENDERTARGET_LINKED, "fukken_phone"))
+            //{
+            //    Function.Call(Hash.LINK_NAMED_RENDERTARGET, 0xc2161726);
+            //    Debug.WriteLine("RT not linked");
+            //}
         }
 
         protected volatile Fringe frng;
@@ -169,106 +227,26 @@ namespace FRGenerics
             Function.Call(Hash._POP_SCALEFORM_MOVIE_FUNCTION_VOID);
         }
 
+        protected Phone phone = new Phone();
+
         public async Task OnTick21()
         {
-            await LoadTextureDict("Phone_Wallpaper_ifruitdefault");
-
-            if (!set)
+            if (Game.IsControlJustReleased(1, Control.PhoneUp))
             {
-                try
-                {
-                    sff = new Scaleform("cellphone_ifruit");
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("Something bad happened :(");
-                }
-                
-                Function.Call(Hash.DESTROY_MOBILE_PHONE);
-                set = true;
+                phone.Open();
             }
 
-            //if (!sff.IsLoaded)
-            //{
-            //    Debug.WriteLine("NOT LOADED!!!");
-            //}
-
-            if (!phoneOpen && Game.IsControlJustReleased(1, Control.PhoneUp))
+            if (Game.IsControlJustReleased(1, Control.FrontendCancel))
             {
-                Function.Call(Hash.CREATE_MOBILE_PHONE, 0);
-                Function.Call(Hash.SET_MOBILE_PHONE_SCALE, 250f);
-
-                phoneYpos.Start(-60f, -20f, .3f, ScaleFuncs.Linear);
-                phoneYrot.Start(-90f, 0f, .3f, ScaleFuncs.Linear);
-                phoneOpening = true;
-            }
-            
-            if (phoneOpening)
-            {
-                if (phoneYpos.State == TweenState.Stopped && phoneYrot.State == TweenState.Stopped)
-                {
-                    phoneOpen = true;
-                    phoneOpening = false;
-                }
-                else if (phoneYpos.State == TweenState.Running || phoneYrot.State == TweenState.Running)
-                {
-                    phoneYpos.Update(Game.LastFrameTime);
-                    phoneYrot.Update(Game.LastFrameTime);
-
-                    Function.Call(Hash.SET_MOBILE_PHONE_POSITION, 50.0f, phoneYpos.CurrentValue, -60.0f);
-                    Function.Call(Hash.SET_MOBILE_PHONE_ROTATION, -90f, phoneYrot.CurrentValue, 0f, true);
-                }
+                phone.Close();
             }
 
-            if (phoneClosing)
-            {
-                if (phoneYpos.State == TweenState.Stopped)
-                {
-                    phoneClosing = false;
-                    phoneOpen = false;
-                    Function.Call(Hash.DESTROY_MOBILE_PHONE);
-                }
-                else if (phoneYpos.State == TweenState.Running)
-                {
-                    phoneYpos.Update(Game.LastFrameTime);
+            await phone.Update();
 
-                    Function.Call(Hash.SET_MOBILE_PHONE_POSITION, 50.0f, phoneYpos.CurrentValue, -60.0f);
-                }
-            }
+            //Debug.WriteLine("Tick21");
 
-            if (phoneOpen && !phoneClosing && Game.IsControlJustReleased(1, Control.FrontendCancel))
-            {
-                phoneClosing = true;
-
-                phoneYpos.Start(-20f, -60f, .1f, ScaleFuncs.Linear);
-
-                Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "Put_Away", "Phone_SoundSet_Michael", 1);
-            }
-
-            var txt2 = new Text("Nope", new PointF(0f, 0f), .5f);
-            txt2.Draw();
-
-            if (phoneOpen || phoneOpening || phoneClosing)
-            {
-                var renderId = new OutputArgument();
-                Function.Call(Hash.GET_MOBILE_PHONE_RENDER_ID, renderId);
-                Function.Call(Hash.SET_TEXT_RENDER_ID, renderId.GetResult<int>());
-
-                //SetWallpaperTXD("Phone_Wallpaper_ifruitdefault");
-
-                sff.CallFunction("SET_BACKGROUND_CREW_IMAGE", "Phone_Wallpaper_ifruitdefault");
-
-                Function.Call(Hash._PUSH_SCALEFORM_MOVIE_FUNCTION, sff.Handle, "SET_HEADER");
-                Function.Call(Hash._BEGIN_TEXT_COMPONENT, "STRING");
-                Function.Call((Hash) 0x761B77454205A61D, "Weeb!", -1);
-                Function.Call(Hash._END_TEXT_COMPONENT);
-                Function.Call(Hash._POP_SCALEFORM_MOVIE_FUNCTION_VOID);
-
-                sff.Render2DScreenSpace(new PointF(0f, 0f), new PointF(256f, 256f));
-
-
-                Function.Call(Hash.SET_TEXT_RENDER_ID, 1);
-            }
+            //var logoTXD = "mpcarhud";
+            //var logoTexture = "vehicle_card_icons_flag_japan";
 
             //if (!set)
             //{
