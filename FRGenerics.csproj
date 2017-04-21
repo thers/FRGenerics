@@ -61,6 +61,8 @@
     <Compile Include="HeadDisplayManager.cs" />
     <Compile Include="iFruit\CustomiFruit.cs" />
     <None Include="Test\Tests.cs" />
+    <Compile Include="Lab\Phone\Apps\Base.cs" />
+    <Compile Include="Lab\Phone\Apps\HomeMenu.cs" />
     <Compile Include="Lab\Phone\Phone.cs" />
     <Compile Include="Lab\Phone\Wallpaper.cs" />
     <Compile Include="NativeExtras\Streaming.cs" />

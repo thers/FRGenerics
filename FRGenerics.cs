@@ -6,6 +6,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using TinyTween;
 using FRGenerics.Lab.Phone;
+using NativeUI;
 
 namespace FRGenerics
 {
@@ -229,6 +230,12 @@ namespace FRGenerics
 
         protected Phone phone = new Phone();
 
+
+        protected TimerBarPool tbp = new TimerBarPool();
+        protected BarTimerBar btb = new BarTimerBar("WEEBING");
+        protected BarTimerBar btb2 = new BarTimerBar("WEEBING2");
+        protected TextTimerBar tmb = new TextTimerBar("Team1", "150");
+
         public async Task OnTick21()
         {
             if (Game.IsControlJustReleased(1, Control.PhoneUp))
@@ -242,6 +249,48 @@ namespace FRGenerics
             }
 
             await phone.Update();
+
+
+
+
+            // HUH
+            //if (!set)
+            //{
+            //    set = true;
+
+            //    sff = new Scaleform('mp_bigmessage');
+            //}
+            //BigMessageThread.MessageInstance.ShowRankupMessage("Yay", "subtitle", 100500);
+            //BigMessageThread.MessageInstance.ShowMpMessageLarge("Masssage?");
+            //if (!set)
+            //{
+            //    set = true;
+
+            //    btb.BackgroundColor = UnknownColors.DarkMagenta;
+            //    btb.ForegroundColor = UnknownColors.Magenta;
+            //    btb.Percentage = 0f;
+            //    tbp.Add(btb);
+
+            //    btb2.BackgroundColor = UnknownColors.Olive;
+            //    btb2.ForegroundColor = UnknownColors.DarkOliveGreen;
+            //    btb2.Percentage = 0f;
+            //    tbp.Add(btb2);
+                
+            //    tbp.Add(tmb);
+            //}
+
+            //btb.Percentage += 0.2f * Game.LastFrameTime;
+            
+            //if (btb.Percentage > 1f)
+            //{
+            //    btb.Percentage = 0f;
+            //}
+
+            //btb2.Percentage = btb.Percentage;
+
+            //tbp.Draw();
+            // /HUH
+
 
             //Debug.WriteLine("Tick21");
 

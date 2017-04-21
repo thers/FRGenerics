@@ -90,7 +90,7 @@ namespace FRGenerics
                 throw new EntityDecorationUndefinedTypeException();
             }
 
-            return (T) Function.Call<T>(nativeMethod, entity.NativeValue, propertyName);
+            return Function.Call<T>(nativeMethod, entity.NativeValue, propertyName);
         }
         
         public static T GetDecor<T>(this Entity ent, string propertyName)
@@ -99,6 +99,6 @@ namespace FRGenerics
         }
     }
 
-    public class EntityDecorationUnregisteredPropertyException : Exception { }
-    public class EntityDecorationUndefinedTypeException : Exception { }
+    public class EntityDecorationUnregisteredPropertyException : InvalidOperationException { }
+    public class EntityDecorationUndefinedTypeException : InvalidOperationException { }
 }
